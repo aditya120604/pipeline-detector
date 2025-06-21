@@ -10,7 +10,7 @@ st.set_page_config(
     layout="centered"
 )
 
-# Custom CSS
+# Custom CSS for navbar and layout
 st.markdown("""
     <style>
     body {
@@ -21,7 +21,7 @@ st.markdown("""
         padding: 2rem;
         border-radius: 10px;
         box-shadow: 0 0 20px rgba(0,0,0,0.2);
-        margin-top: -60px;
+        margin-top: 20px;
     }
     h1, h2, h3 {
         color: #ffffff;
@@ -38,8 +38,22 @@ st.markdown("""
     .block-container {
         padding-top: 1rem;
     }
+    /* Navbar styling */
+    .navbar {
+        background-color: #004080;
+        padding: 1rem 2rem;
+        color: white;
+        text-align: center;
+        font-size: 1.5rem;
+        font-weight: bold;
+        border-radius: 8px;
+        box-shadow: 0px 3px 10px rgba(0,0,0,0.3);
+    }
     </style>
 """, unsafe_allow_html=True)
+
+# Navbar
+st.markdown('<div class="navbar">Pipeline Corrosion Detection Tool</div>', unsafe_allow_html=True)
 
 # Sidebar
 st.sidebar.title("🔍 About")
@@ -65,7 +79,7 @@ interpreter, input_details, output_details = load_tflite_model()
 
 # Inference
 def predict(image: Image.Image):
-    image = image.resize((224, 224))  # Resize to TM standard
+    image = image.resize((224, 224))
     image_np = np.asarray(image).astype(np.float32)
     normalized = (image_np / 127.5) - 1
     input_data = np.expand_dims(normalized, axis=0)
@@ -74,10 +88,10 @@ def predict(image: Image.Image):
     output = interpreter.get_tensor(output_details[0]['index'])[0]
     return output
 
-# Main section
+# Main Section
 st.markdown("<div class='main'>", unsafe_allow_html=True)
-st.title("Pipeline Corrosion Detection")
-st.subheader("Upload an image to detect pipeline condition")
+st.title("Detect Pipeline Condition")
+st.subheader("Upload an image to classify it as Normal or Corroded")
 
 uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
